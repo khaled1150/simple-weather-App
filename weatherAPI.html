@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Weather API</title>
+    <link rel="stylesheet" href="./weatherAPI.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- first part of the page title search bar and submit button-->
+    <div class="headrow">
+      <div class="col">
+        <p class="title">Simple Weather App</p>
+        <div class="search-row">
+          <input type="text" class="city" placeholder="Search for a city" />
+          <button class="search">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+    <!--    the weather card part    -->
+    <div class="screen-bottom">
+      <div class="white-card">
+        <p class="city-name">city name</p>
+        <div class="tem">
+          <p class="temp">temp</p>
+          <p class="degree">&deg;C</p>
+        </div>
+        <div class="icon-box"></div>
+
+        <p class="desc">weather describtion</p>
+      </div>
+      <div class="shadow"></div>
+    </div>
+    <script>
+      let city = "";
+      let input = document.querySelector(".city");
+      let submit = document.querySelector(".search");
+      let cityNAme = document.querySelector(".city-name");
+      let temp = document.querySelector(".temp");
+      let desc = document.querySelector(".desc");
+      let icon = document.querySelector(".icon-box");
+      submit.addEventListener("click", (event) => {
+        city = input.value.toLowerCase();
+
+        fetch(
+          `http://api.weatherapi.com/v1/current.json?key=48ad21baec4c4ee090881931242002&q=${city}&aqi=no`
+        )
+          .then((res) => {
+            if (res.ok) {
+              cityNAme.innerText = city;
+              return res.json();
+            } else {
+              alert("enter a correct city ,please");
+            }
+          })
+          .then((res) => {
+            console.log(res);
+            temp.innerText = res.current.temp_c;
+            desc.innerText = res.current.condition.text;
+            let html = `<img src=${res.current.condition.icon} alt="weather icon" class="icon" />`;
+            icon.innerHTML = html;
+          });
+      });
+    </script>
+  </body>
+</html>
